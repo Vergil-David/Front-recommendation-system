@@ -1,37 +1,51 @@
-FRONTEND-BACKEND CONNECTION NOTES
+FRONTEND-BACKEND CONNECTION NOTES (UPDATED)
 
-What was connected
-- Frontend API client now has a safe fallback base URL:
-  - Uses VITE_API_URL if provided
-  - Falls back to /api if VITE_API_URL is not set
-- Vite dev server proxy was added:
-  - /api/* -> http://localhost:8080/*
-  - This avoids browser CORS issues in local development
+1) Current frontend-backend integration
+- Frontend auth API is separated into dedicated file:
+  - src/api/auth.ts
+- Auth pages use API functions instead of inline fetch logic:
+  - LoginPage -> login(...)
+  - RegisterPage -> register(...)
+- Auth uses direct backend URL:
+  - API_URL = http://localhost:8080
 
-Important
-- Go backend code was NOT changed.
+2) 401 login fix applied
+- Added normalization before login/register request:
+  - email -> trim + lowercase
+  - username -> trim
+  - password -> trim
+- Added explicit 401 handling in login API:
+  - returns user-friendly error: "Невірний email або пароль"
+- This fixes common false 401 cases caused by spaces/case in input.
 
-How to run
-1) Start backend (Go project) on port 8080.
-2) In frontend project run:
-   npm install
-   npm run dev
-3) Open frontend in browser.
+3) UI update (auth pages)
+- Login/Register pages restyled to strict dark minimalist theme:
+  - background: #0b2545
+  - panel/input: #13315c
+  - button/accent: #134074
+  - muted text: #8da9c4
+  - primary text: #eef4ed
+- No theme hsl vars used in these pages.
+- No logic/state changes for auth flow.
 
-Environment options
-- Option A (recommended with proxy):
-  - Set VITE_API_URL=/api (or leave it unset)
-  - Frontend will call /api and Vite will proxy to backend
+4) Backend compatibility
+- Backend now has CORS middleware configured for frontend origin (see backend txt).
+- Allowed frontend origin is controlled by env:
+  - FRONTEND_URL=http://localhost:5173
 
-- Option B (direct backend URL):
-  - Set VITE_API_URL=http://localhost:8080
-  - Note: this can require CORS support on backend
+5) How to run
+1. Start backend on port 8080.
+2. In frontend project:
+   - npm install
+   - npm run dev
+3. Open frontend in browser (usually http://localhost:5173).
 
-API endpoints used by frontend
+6) API endpoints used by frontend
 - POST /auth/register
 - POST /auth/login
 - GET /users/me
 - GET /friends
 - POST /friends/requests
 - POST /friends/requests/respond
+- GET /movies
 - GET /ping

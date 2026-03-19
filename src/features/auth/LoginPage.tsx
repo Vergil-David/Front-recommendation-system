@@ -1,25 +1,20 @@
-import { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLoginMutation } from "@/features/auth/hooks";
+import { login } from "@/api/auth";
 import { useAuthStore } from "@/features/auth/authStore";
-import type { ApiErrorResponse } from "@/types/api";
 
 export function LoginPage() {
   const navigate = useNavigate();
   const { setToken, setUser } = useAuthStore();
-  const loginMutation = useLoginMutation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState<string | null>(null);
-
-  const backendError = (loginMutation.error as AxiosError<ApiErrorResponse> | null)?.response?.data
-    ?.error;
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -31,27 +26,37 @@ export function LoginPage() {
     }
 
     try {
-      const data = await loginMutation.mutateAsync({ email, password });
+      setLoading(true);
+      const data = await login(email, password);
       setToken(data.token);
       setUser(data.user);
+      localStorage.setItem("token", data.token);
       navigate("/home", { replace: true });
-    } catch {
-      // Mutation error is surfaced via loginMutation.error.
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Login failed";
+      alert(message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Enter your credentials to continue.</CardDescription>
+    <div className="flex min-h-screen items-center justify-center bg-[#0b2545] p-6 md:p-8">
+      <Card className="w-full max-w-md rounded-2xl border-0 bg-transparent text-[#eef4ed] shadow-none">
+        <CardHeader className="px-0 pt-0">
+          <CardTitle className="text-3xl font-bold text-[#eef4ed]">Login</CardTitle>
+          <CardDescription className="text-[#8da9c4]">
+            Enter your credentials to continue.
+          </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-0">
           <form className="space-y-4" onSubmit={onSubmit}>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label className="text-sm text-[#8da9c4]" htmlFor="email">
+                Email
+              </Label>
               <Input
+                className="h-12 rounded-xl border-0 bg-[#13315c] px-4 text-[#eef4ed] placeholder:text-[#8da9c4] focus-visible:ring-1 focus-visible:ring-[#134074]"
                 id="email"
                 type="email"
                 value={email}
@@ -60,8 +65,11 @@ export function LoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label className="text-sm text-[#8da9c4]" htmlFor="password">
+                Password
+              </Label>
               <Input
+                className="h-12 rounded-xl border-0 bg-[#13315c] px-4 text-[#eef4ed] placeholder:text-[#8da9c4] focus-visible:ring-1 focus-visible:ring-[#134074]"
                 id="password"
                 type="password"
                 value={password}
@@ -69,18 +77,20 @@ export function LoginPage() {
                 required
               />
             </div>
-            {(validationError || backendError) && (
-              <p className="text-sm text-red-600">{validationError ?? backendError}</p>
-            )}
-            <Button className="w-full" type="submit" disabled={loginMutation.isPending}>
-              {loginMutation.isPending ? "Logging in..." : "Login"}
+            {validationError && <p className="text-sm text-[#8da9c4]">{validationError}</p>}
+            <Button
+              className="h-12 w-full rounded-xl bg-[#134074] font-semibold text-[#eef4ed] hover:bg-[#134074]/90 active:bg-[#134074]/80"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Завантаження..." : "Login"}
             </Button>
           </form>
         </CardContent>
-        <CardFooter>
-          <p className="text-sm">
+        <CardFooter className="px-0 pb-0 pt-2">
+          <p className="text-sm text-[#8da9c4]">
             No account?{" "}
-            <Link className="underline" to="/register">
+            <Link className="text-[#8da9c4] underline transition-colors hover:text-[#eef4ed]" to="/register">
               Register
             </Link>
           </p>
