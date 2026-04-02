@@ -4,9 +4,11 @@ import { ProtectedRoute } from "@/components/common/ProtectedRoute";
 import { RootRedirect } from "@/components/common/RootRedirect";
 import { LoginPage } from "@/features/auth/LoginPage";
 import { RegisterPage } from "@/features/auth/RegisterPage";
-import { ExplorePage } from "@/features/placeholders/ExplorePage";
-import { FriendsPage } from "@/features/placeholders/FriendsPage";
-import { HomePage } from "@/features/placeholders/HomePage";
+import { Explore } from "@/pages/Explore";
+import { Friends } from "@/pages/Friends";
+import { Home } from "@/pages/Home";
+import { Library } from "@/pages/Library";
+import { MovieDetails } from "@/pages/MovieDetails";
 import { SettingsPage } from "@/features/placeholders/SettingsPage";
 
 export const router = createBrowserRouter([
@@ -28,9 +30,11 @@ export const router = createBrowserRouter([
       {
         element: <AppShell />,
         children: [
-          { path: "/home", element: <HomePage /> },
-          { path: "/explore", element: <ExplorePage /> },
-          { path: "/friends", element: <FriendsPage /> },
+          { path: "/home", element: <Home /> },
+          { path: "/explore", element: <Explore /> },
+          { path: "/movies/:movieId", element: <MovieDetails /> },
+          { path: "/library", element: <Library /> },
+          { path: "/friends", element: <Friends /> },
           { path: "/settings", element: <SettingsPage /> },
         ],
       },

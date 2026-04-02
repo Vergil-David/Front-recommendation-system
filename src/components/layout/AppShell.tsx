@@ -3,9 +3,9 @@ import { Navbar } from "@/components/layout/Navbar";
 
 export function AppShell() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#0b2545]">
       <Navbar />
-      <main className="mx-auto w-full max-w-5xl px-4 py-6">
+      <main className="w-full">
         <Outlet />
       </main>
     </div>
