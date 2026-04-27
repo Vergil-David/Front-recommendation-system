@@ -1,4 +1,5 @@
 import type { Movie } from "@/api/movies";
+import { MoviePoster } from "@/components/MoviePoster";
 
 type HeroBannerProps = {
   movie: Movie;
@@ -10,33 +11,55 @@ type HeroBannerProps = {
 
 export function HeroBanner({
   movie,
-  eyebrow = "4.8 Rating Drama, Fiction",
+  eyebrow = "Featured selection",
   title,
   description,
   actions,
 }: HeroBannerProps) {
   return (
-    <div className="relative h-[500px] w-full overflow-hidden">
-      <img src={movie.image_url} alt={movie.title} className="absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0b2545] via-[#0b2545]/80 to-transparent backdrop-blur-md" />
+    <section className="relative h-[82vh] min-h-[620px] w-full overflow-hidden">
+      <div className="absolute inset-0">
+        <MoviePoster
+          imageUrl={movie.image_url}
+          title={movie.title}
+          className="h-full w-full scale-110 object-cover object-center opacity-80 blur-sm"
+          loading="eager"
+        />
+      </div>
+      <div className="absolute inset-0 gradient-hero" />
+      <div className="absolute inset-0 gradient-hero-side" />
+      <div className="absolute inset-x-0 bottom-0 h-36 gradient-fade-bottom" />
 
       <div className="relative z-10 h-full">
-        <div className="mx-auto flex h-full max-w-7xl items-center px-6 pt-16 pb-10">
-          <div className="flex w-full flex-col gap-8 md:flex-row md:items-center md:gap-10">
-            <img src={movie.image_url} alt={movie.title} className="w-40 rounded-xl object-cover shadow-xl" />
+        <div className="mx-auto flex h-full max-w-[1440px] items-end px-4 pb-16 pt-24 md:px-8 md:pb-24">
+          <div className="flex w-full items-end gap-8 md:gap-12">
+            <MoviePoster
+              imageUrl={movie.image_url}
+              title={movie.title}
+              className="hidden aspect-[2/3] w-44 shrink-0 rounded-lg object-cover soft-depth md:block lg:w-52"
+              loading="eager"
+            />
 
-            <div>
-              <p className="text-sm text-[#8da9c4]">{eyebrow}</p>
-              <h1 className="mt-3 text-4xl font-bold text-[#eef4ed] md:text-5xl">{title ?? movie.title}</h1>
-              <p className="mt-4 max-w-xl line-clamp-3 text-sm leading-6 text-[#8da9c4]">
+            <div className="max-w-3xl pb-1">
+              <p className="animate-fade-in text-sm font-semibold uppercase tracking-[0.24em] text-[#8da9c4]">
+                {eyebrow}
+              </p>
+              <h1 className="font-display mt-4 max-w-4xl animate-fade-in-up text-5xl font-bold leading-tight text-[#eef4ed] md:text-6xl lg:text-7xl">
+                {title ?? movie.title}
+              </h1>
+              <p className="mt-5 max-w-2xl animate-fade-in line-clamp-3 text-base leading-7 text-[#8da9c4]">
                 {description ?? movie.description}
               </p>
 
-              {actions ? <div className="mt-6 flex flex-wrap gap-3">{actions}</div> : null}
+              {actions ? (
+                <div className="mt-8 flex animate-fade-in flex-wrap items-center gap-3">
+                  {actions}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

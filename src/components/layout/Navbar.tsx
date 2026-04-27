@@ -25,31 +25,41 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "w-full",
-        isOverlay ? "absolute left-0 top-0 z-30 bg-transparent" : "border-b border-[#134074] bg-[#0b2545]",
+        "fixed left-0 top-0 z-50 w-full transition-all duration-500",
+        isOverlay ? "bg-transparent" : "glass-strong",
       )}
     >
-      <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 md:px-8">
-        <div className="flex items-center gap-5 text-sm text-[#8da9c4]">
-          <p className="text-lg font-semibold text-[#eef4ed]">PageStream</p>
-          {links.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) =>
-                cn("transition-colors hover:text-[#eef4ed]", isActive && "text-[#eef4ed]")
-              }
-            >
-              {link.label}
-            </NavLink>
-          ))}
+      <nav className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between gap-4 px-4 md:px-8">
+        <div className="flex min-w-0 items-center gap-5 md:gap-8">
+          <p className="font-display shrink-0 text-xl font-bold tracking-wide text-[#eef4ed]">
+            PageStream
+          </p>
+          <div className="scrollbar-hide flex min-w-0 items-center gap-5 overflow-x-auto text-sm font-medium text-[#8da9c4] md:gap-8">
+            {links.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }) =>
+                  cn(
+                    "relative shrink-0 py-2 transition-all duration-300 hover:text-[#eef4ed]",
+                    isActive &&
+                      "text-[#eef4ed] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-[#8da9c4]",
+                  )
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-[#8da9c4]">{user?.username ?? "User"}</span>
+        <div className="flex shrink-0 items-center gap-3">
+          <span className="hidden text-sm font-medium text-[#8da9c4] sm:inline">
+            {user?.username ?? "User"}
+          </span>
           <Button
             type="button"
             size="sm"
-            className="rounded-xl bg-[#134074] text-[#eef4ed] hover:bg-[#134074]/90"
+            className="h-9 rounded-full bg-[#eef4ed] px-4 text-sm font-semibold text-[#0b2545] shadow-[0_12px_30px_rgba(0,0,0,0.24)] transition hover:scale-105 hover:bg-[#eef4ed]/90"
             onClick={onLogout}
           >
             Logout

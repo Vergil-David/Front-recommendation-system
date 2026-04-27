@@ -44,8 +44,23 @@ FRONTEND-BACKEND CONNECTION NOTES (UPDATED)
 - POST /auth/register
 - POST /auth/login
 - GET /users/me
+- GET /users/search
 - GET /friends
 - POST /friends/requests
+- GET /friends/requests/incoming
+- GET /friends/requests/outgoing
 - POST /friends/requests/respond
 - GET /movies
 - GET /ping
+
+7) Friends 404 postmortem
+- Root cause of `404` on Friends page was not frontend design or API naming.
+- Frontend dev client correctly calls `/api/...` and Vite proxy correctly rewrites:
+  - `/api/users/search` -> `http://localhost:8080/users/search`
+  - `/api/friends/requests/incoming` -> `http://localhost:8080/friends/requests/incoming`
+  - `/api/friends/requests/outgoing` -> `http://localhost:8080/friends/requests/outgoing`
+- The issue was an outdated backend process running on port `8080`. It served old routes and did not include the new friends endpoints.
+- After restarting the current backend code, these URLs stopped returning `404`.
+- Expected behavior now:
+  - direct backend routes without token return `401` because they are protected;
+  - frontend dev routes under `/api/...` also return `401` without token and work normally when the browser sends the Bearer token through `src/api/client.ts`.

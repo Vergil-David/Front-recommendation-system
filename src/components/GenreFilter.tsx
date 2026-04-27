@@ -37,8 +37,10 @@ export function GenreFilter({ selected, onSelect }: GenreFilterProps) {
             type="button"
             onClick={() => onSelect(genre)}
             className={cn(
-              "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-              active ? "bg-[#eef4ed] text-[#0b2545]" : "bg-[#13315c] text-[#8da9c4] hover:bg-[#134074] hover:text-[#eef4ed]",
+              "rounded-full px-4 py-2.5 text-sm font-semibold shadow-[0_12px_28px_rgba(0,0,0,0.16)] transition-all duration-300 hover:scale-105",
+              active
+                ? "bg-[#eef4ed] text-[#0b2545]"
+                : "glass text-[#8da9c4] hover:bg-[#134074]/80 hover:text-[#eef4ed]",
             )}
           >
             {genre}
