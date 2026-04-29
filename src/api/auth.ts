@@ -1,3 +1,4 @@
+import { apiClient } from "@/api/client";
 import type { AuthResponse, MeResponse } from "@/types/api";
 
 const API_URL = "http://localhost:8080";
@@ -76,20 +77,6 @@ export const register = async (
 };
 
 export const me = async (): Promise<MeResponse> => {
-  const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/users/me`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-  });
-
-  const data = await parseJSON<MeResponse & ApiErrorBody>(res);
-
-  if (!res.ok) {
-    throw new Error(data.message || data.error || "Failed to load user profile");
-  }
-
-  return data;
+  const response = await apiClient.get<MeResponse>("/users/me");
+  return response.data;
 };
