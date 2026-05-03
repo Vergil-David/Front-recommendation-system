@@ -1,16 +1,10 @@
 import { apiClient } from "@/api/client";
 import type { AuthResponse, MeResponse } from "@/types/api";
-
-const API_URL = "http://localhost:8080";
+import axios from "axios";
 
 type ApiErrorBody = {
   message?: string;
   error?: string;
-};
-
-const parseJSON = async <T>(res: Response): Promise<T> => {
-  const text = await res.text();
-  return text ? (JSON.parse(text) as T) : ({} as T);
 };
 
 export const login = async (email: string, password: string): Promise<AuthResponse> => {
@@ -21,25 +15,23 @@ export const login = async (email: string, password: string): Promise<AuthRespon
     throw new Error("Email and password are required");
   }
 
-  const res = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email: normalizedEmail, password: normalizedPassword }),
-  });
+  try {
+    const response = await apiClient.post<AuthResponse>("/auth/login", {
+      email: normalizedEmail,
+      password: normalizedPassword,
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError<ApiErrorBody>(error)) {
+      if (error.response?.status === 401) {
+        throw new Error("Невірний email або пароль");
+      }
 
-  const data = await parseJSON<AuthResponse & ApiErrorBody>(res);
+      throw new Error(error.response?.data?.message || error.response?.data?.error || "Login failed");
+    }
 
-  if (res.status === 401) {
-    throw new Error("Невірний email або пароль");
+    throw error;
   }
-
-  if (!res.ok) {
-    throw new Error(data.message || data.error || "Login failed");
-  }
-
-  return data;
 };
 
 export const register = async (
@@ -55,25 +47,20 @@ export const register = async (
     throw new Error("Username, email and password are required");
   }
 
-  const res = await fetch(`${API_URL}/auth/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  try {
+    const response = await apiClient.post<AuthResponse>("/auth/register", {
       username: normalizedUsername,
       email: normalizedEmail,
       password: normalizedPassword,
-    }),
-  });
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError<ApiErrorBody>(error)) {
+      throw new Error(error.response?.data?.message || error.response?.data?.error || "Registration failed");
+    }
 
-  const data = await parseJSON<AuthResponse & ApiErrorBody>(res);
-
-  if (!res.ok) {
-    throw new Error(data.message || data.error || "Registration failed");
+    throw error;
   }
-
-  return data;
 };
 
 export const me = async (): Promise<MeResponse> => {

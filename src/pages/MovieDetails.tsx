@@ -1,32 +1,93 @@
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Calendar, Compass, Plus } from "lucide-react";
-import { getMovies, type Movie } from "@/api/movies";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { ArrowLeft, Ban, Calendar, Check, Compass, Heart, Plus, Star, ThumbsDown } from "lucide-react";
+import { getMovieById, getMovies, type Movie } from "@/api/movies";
+import { createInteraction, getRecommendations, type InteractionType } from "@/api/recommendations";
+import {
+  applyInteractionToState,
+  createEmptyInteractionState,
+  useMovieInteractionStates,
+} from "@/features/interactions/useMovieInteractionStates";
+import { MovieActionButton } from "@/components/MovieActionButton";
 import { HeroBanner } from "@/components/HeroBanner";
 import { MoviePoster } from "@/components/MoviePoster";
 import { RowSection } from "@/components/RowSection";
+import { cn } from "@/utils/cn";
+
+type DetailActionType = Extract<
+  InteractionType,
+  "viewed" | "liked" | "disliked" | "favorite" | "skipped"
+>;
 
 export function MovieDetails() {
   const { movieId } = useParams();
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movie, setMovie] = useState<Movie | null>(null);
+  const [relatedMovies, setRelatedMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
+  const [pendingAction, setPendingAction] = useState<InteractionType | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
-    const loadMovies = async () => {
+    const loadMovieDetails = async () => {
+      if (!movieId) {
+        if (isMounted) {
+          setMovie(null);
+          setRelatedMovies([]);
+          setNotFound(false);
+          setError("Не вдалося завантажити фільм");
+          setLoading(false);
+        }
+        return;
+      }
+
       try {
         setLoading(true);
         setError(null);
-        const data = await getMovies();
+        setNotFound(false);
+
+        const [movieResult, moviesResult, recommendationsResult] = await Promise.allSettled([
+          getMovieById(movieId),
+          getMovies(1, 50),
+          getRecommendations(50),
+        ]);
+
+        if (movieResult.status === "rejected") {
+          throw movieResult.reason;
+        }
+
+        const currentMovie = movieResult.value;
+        const movieItems = moviesResult.status === "fulfilled" ? moviesResult.value.items : [];
+        const recommendedItems =
+          recommendationsResult.status === "fulfilled" ? recommendationsResult.value.items : [];
+        const relatedMap = new Map<number, Movie>();
+
+        for (const item of [...movieItems, ...recommendedItems]) {
+          if (String(item.id) === String(currentMovie.id) || relatedMap.has(item.id)) {
+            continue;
+          }
+
+          relatedMap.set(item.id, item);
+        }
 
         if (isMounted) {
-          setMovies(data.items);
+          setMovie(currentMovie);
+          setRelatedMovies(Array.from(relatedMap.values()).slice(0, 10));
         }
-      } catch {
+      } catch (loadError) {
         if (isMounted) {
-          setError("Не вдалося завантажити фільми");
+          setMovie(null);
+          setRelatedMovies([]);
+
+          if (axios.isAxiosError(loadError) && loadError.response?.status === 404) {
+            setNotFound(true);
+            setError(null);
+          } else {
+            setError("Не вдалося завантажити фільм");
+          }
         }
       } finally {
         if (isMounted) {
@@ -35,21 +96,64 @@ export function MovieDetails() {
       }
     };
 
-    void loadMovies();
+    void loadMovieDetails();
 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [movieId]);
 
-  const movie = useMemo(
-    () => movies.find((item) => String(item.id) === movieId),
-    [movieId, movies],
+  const { interactionStates, setInteractionState } = useMovieInteractionStates(
+    movie ? [movie.id] : [],
   );
-  const relatedMovies = useMemo(
-    () => movies.filter((item) => item.id !== movie?.id).slice(0, 10),
-    [movie, movies],
-  );
+  const interactionState = movie
+    ? interactionStates[movie.id] ?? createEmptyInteractionState()
+    : createEmptyInteractionState();
+
+  useEffect(() => {
+    if (!movie || interactionState.viewed) {
+      return;
+    }
+
+    const nextState = applyInteractionToState(interactionState, "viewed");
+    setInteractionState(movie.id, nextState);
+
+    void createInteraction(movie.id, "viewed").catch((error) => {
+      console.error("Failed to record movie view", error);
+      setInteractionState(movie.id, interactionState);
+    });
+  }, [interactionState, movie, setInteractionState]);
+
+  const handleInteraction = async (type: DetailActionType) => {
+    if (!movie || pendingAction === type) {
+      return;
+    }
+
+    const isAlreadyActive =
+      (type === "viewed" && interactionState.viewed) ||
+      (type === "liked" && interactionState.liked) ||
+      (type === "disliked" && interactionState.disliked) ||
+      (type === "favorite" && interactionState.favorite) ||
+      (type === "skipped" && interactionState.skipped);
+
+    if (isAlreadyActive) {
+      return;
+    }
+
+    const previousState = interactionState;
+    const nextState = applyInteractionToState(previousState, type);
+
+    try {
+      setPendingAction(type);
+      setInteractionState(movie.id, nextState);
+      await createInteraction(movie.id, type);
+    } catch (error) {
+      console.error(`Failed to record detail interaction ${type}`, error);
+      setInteractionState(movie.id, previousState);
+    } finally {
+      setPendingAction(null);
+    }
+  };
 
   return (
     <section className="min-h-screen pb-20">
@@ -69,7 +173,7 @@ export function MovieDetails() {
         </div>
       )}
 
-      {!loading && !error && !movie && (
+      {!loading && !error && notFound && (
         <div className="mx-auto flex min-h-screen max-w-[1440px] items-center justify-center px-4 md:px-8">
           <p className="glass rounded-full px-5 py-3 text-base font-medium text-[#eef4ed]">
             Фільм не знайдено
@@ -86,15 +190,8 @@ export function MovieDetails() {
             actions={
               <>
                 <Link
-                  to="/library"
-                  className="inline-flex items-center gap-2 rounded-lg bg-[#eef4ed] px-6 py-3 text-sm font-semibold text-[#0b2545] shadow-[0_18px_45px_rgba(0,0,0,0.25)] transition duration-300 hover:scale-105 hover:bg-[#eef4ed]/90"
-                >
-                  <Plus className="h-4 w-4" aria-hidden="true" />
-                  Add to Library
-                </Link>
-                <Link
                   to="/explore"
-                  className="glass inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-[#eef4ed] transition duration-300 hover:scale-105 hover:bg-[#134074]/80"
+                  className="glass inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-[#eef4ed] transition duration-300 hover:-translate-y-0.5 hover:bg-[#134074]/80"
                 >
                   <ArrowLeft className="h-4 w-4" aria-hidden="true" />
                   Back to Explore
@@ -108,7 +205,10 @@ export function MovieDetails() {
               <MoviePoster
                 imageUrl={movie.image_url}
                 title={movie.title}
-                className="aspect-[2/3] w-full rounded-lg object-cover soft-depth"
+                className={cn(
+                  "aspect-[2/3] w-full rounded-lg object-cover soft-depth transition duration-300",
+                  interactionState.skipped && "opacity-45 saturate-50",
+                )}
               />
               <div className="flex flex-col justify-center space-y-6">
                 <div className="space-y-3">
@@ -128,6 +228,59 @@ export function MovieDetails() {
                     <Compass className="h-4 w-4 text-[#8da9c4]" aria-hidden="true" />
                     Curated match
                   </span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <MovieActionButton
+                    label="Watched"
+                    icon={Check}
+                    active={interactionState.viewed}
+                    pending={pendingAction === "viewed"}
+                    disabled={pendingAction !== null}
+                    onClick={() => void handleInteraction("viewed")}
+                  />
+                  <MovieActionButton
+                    label="Like"
+                    activeLabel="Liked"
+                    icon={Heart}
+                    active={interactionState.liked}
+                    pending={pendingAction === "liked"}
+                    disabled={pendingAction !== null}
+                    onClick={() => void handleInteraction("liked")}
+                  />
+                  <MovieActionButton
+                    label="Dislike"
+                    activeLabel="Disliked"
+                    icon={ThumbsDown}
+                    active={interactionState.disliked}
+                    pending={pendingAction === "disliked"}
+                    disabled={pendingAction !== null}
+                    onClick={() => void handleInteraction("disliked")}
+                  />
+                  <MovieActionButton
+                    label="Favorite"
+                    activeLabel="Saved"
+                    icon={Star}
+                    active={interactionState.favorite}
+                    pending={pendingAction === "favorite"}
+                    disabled={pendingAction !== null}
+                    onClick={() => void handleInteraction("favorite")}
+                  />
+                  <MovieActionButton
+                    label="Not interested"
+                    activeLabel="Hidden"
+                    icon={Ban}
+                    active={interactionState.skipped}
+                    pending={pendingAction === "skipped"}
+                    disabled={pendingAction !== null}
+                    onClick={() => void handleInteraction("skipped")}
+                  />
+                  <Link
+                    to="/library"
+                    className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-[rgba(11,37,69,0.7)] px-4 py-2.5 text-sm font-semibold text-[#eef4ed] shadow-[0_18px_45px_rgba(4,15,27,0.24)] backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:bg-[rgba(19,64,116,0.88)]"
+                  >
+                    <Plus className="h-4 w-4" aria-hidden="true" />
+                    Add to Library
+                  </Link>
                 </div>
                 <p className="max-w-3xl text-base leading-8 text-[#8da9c4]">{movie.description}</p>
               </div>
