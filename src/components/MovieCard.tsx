@@ -68,12 +68,7 @@ export function MovieCard({
   };
 
   const recordAction = async (type: QuickActionType) => {
-    if (
-      pendingAction === type ||
-      (type === "liked" && localState.liked) ||
-      (type === "favorite" && localState.favorite) ||
-      (type === "skipped" && localState.skipped)
-    ) {
+    if (pendingAction === type) {
       return;
     }
 

@@ -21,9 +21,12 @@ export const applyInteractionToState = (
     case "viewed":
       return {
         ...currentState,
-        viewed: true,
+        viewed: !currentState.viewed,
       };
     case "liked":
+      if (currentState.liked) {
+        return { ...currentState, liked: false };
+      }
       return {
         ...currentState,
         liked: true,
@@ -31,6 +34,9 @@ export const applyInteractionToState = (
         skipped: false,
       };
     case "disliked":
+      if (currentState.disliked) {
+        return { ...currentState, disliked: false };
+      }
       return {
         ...currentState,
         liked: false,
@@ -39,6 +45,9 @@ export const applyInteractionToState = (
         skipped: false,
       };
     case "favorite":
+      if (currentState.favorite) {
+        return { ...currentState, favorite: false };
+      }
       return {
         ...currentState,
         disliked: false,
@@ -46,6 +55,9 @@ export const applyInteractionToState = (
         skipped: false,
       };
     case "skipped":
+      if (currentState.skipped) {
+        return { ...currentState, skipped: false };
+      }
       return {
         ...currentState,
         liked: false,

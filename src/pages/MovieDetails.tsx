@@ -129,17 +129,6 @@ export function MovieDetails() {
       return;
     }
 
-    const isAlreadyActive =
-      (type === "viewed" && interactionState.viewed) ||
-      (type === "liked" && interactionState.liked) ||
-      (type === "disliked" && interactionState.disliked) ||
-      (type === "favorite" && interactionState.favorite) ||
-      (type === "skipped" && interactionState.skipped);
-
-    if (isAlreadyActive) {
-      return;
-    }
-
     const previousState = interactionState;
     const nextState = applyInteractionToState(previousState, type);
 
