@@ -12,6 +12,15 @@ const GENRE_KEYWORDS: Record<string, string[]> = {
 };
 
 export function getMovieGenres(movie: Movie) {
+  // Use actual genre data from the API when available
+  if (movie.genres && movie.genres.length > 0) {
+    const matched = Object.keys(GENRE_KEYWORDS).filter((genre) =>
+      movie.genres!.some((g) => g.toLowerCase().includes(genre.toLowerCase())),
+    );
+    if (matched.length > 0) return matched;
+  }
+
+  // Fallback: keyword matching on title + description
   const haystack = `${movie.title} ${movie.description}`.toLowerCase();
   const genres = Object.entries(GENRE_KEYWORDS)
     .filter(([, keywords]) => keywords.some((keyword) => haystack.includes(keyword)))

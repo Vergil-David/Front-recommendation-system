@@ -31,6 +31,9 @@ export type RecommendationsResponse = {
 export type FriendRecommendation = {
   id: number;
   title: string;
+  description: string;
+  release_year: number;
+  image_url: string;
   score: number;
   reason: string;
 };

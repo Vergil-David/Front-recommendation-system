@@ -6,6 +6,7 @@ export type Movie = {
   description: string;
   release_year: number;
   image_url: string;
+  genres?: string[];
   metadata?: Record<string, unknown>;
 };
 

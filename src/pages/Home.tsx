@@ -151,8 +151,8 @@ function createFriendRecommendationPlaceholder(item: FriendRecommendation): Movi
   return {
     id: item.id,
     title: item.title,
-    description: item.reason,
-    release_year: 0,
-    image_url: "",
+    description: item.description || item.reason,
+    release_year: item.release_year || 0,
+    image_url: item.image_url || "",
   };
 }
