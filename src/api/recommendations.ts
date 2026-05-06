@@ -26,6 +26,9 @@ export type RecommendationMovie = Movie & {
 
 export type RecommendationsResponse = {
   items: RecommendationMovie[];
+  total: number;
+  offset: number;
+  has_more: boolean;
 };
 
 export type FriendRecommendation = {
@@ -63,9 +66,9 @@ export const getInteractionStates = async (itemIds: number[]) => {
   return response.data;
 };
 
-export const getRecommendations = async (limit = 20) => {
+export const getRecommendations = async (limit = 20, offset = 0) => {
   const response = await apiClient.get<RecommendationsResponse>("/recommendations", {
-    params: { limit },
+    params: { limit, offset },
   });
 
   return response.data;
