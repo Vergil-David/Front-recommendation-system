@@ -4,6 +4,7 @@ import { ProtectedRoute } from "@/components/common/ProtectedRoute";
 import { RootRedirect } from "@/components/common/RootRedirect";
 import { LoginPage } from "@/features/auth/LoginPage";
 import { RegisterPage } from "@/features/auth/RegisterPage";
+import { OnboardingPage } from "@/features/onboarding/OnboardingPage";
 import { Explore } from "@/pages/Explore";
 import { Friends } from "@/pages/Friends";
 import { Home } from "@/pages/Home";
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
+        path: "/onboarding",
+        element: <OnboardingPage />,
+      },
+      {
         element: <AppShell />,
         children: [
           { path: "/home", element: <Home /> },
@@ -45,3 +50,4 @@ export const router = createBrowserRouter([
     element: <Navigate to="/" replace />,
   },
 ]);
+

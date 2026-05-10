@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/api/auth";
 import { useAuthStore } from "@/features/auth/authStore";
+import { isOnboardingComplete } from "@/features/onboarding/OnboardingPage";
 
 type FieldErrors = {
   email?: string;
@@ -51,7 +52,8 @@ export function LoginPage() {
       setToken(data.token);
       setUser(data.user);
       localStorage.setItem("token", data.token);
-      navigate("/home", { replace: true });
+      const destination = isOnboardingComplete(data.user.id) ? "/home" : "/onboarding";
+      navigate(destination, { replace: true });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Не вдалося увійти";
       setServerError(message);

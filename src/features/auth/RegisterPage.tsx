@@ -66,7 +66,7 @@ export function RegisterPage() {
       setToken(data.token);
       setUser(data.user);
       localStorage.setItem("token", data.token);
-      navigate("/home", { replace: true });
+      navigate("/onboarding", { replace: true });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Не вдалося зареєструватися";
       setServerError(message);
