@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Info, Plus } from "lucide-react";
 import { getMovies, type Movie } from "@/api/movies";
+import { getBooks, type Book } from "@/api/books";
 import {
   createInteraction,
   getFriendRecommendations,
@@ -10,9 +11,11 @@ import {
 } from "@/api/recommendations";
 import { HeroBanner } from "@/components/HeroBanner";
 import { RowSection } from "@/components/RowSection";
+import { BookRowSection } from "@/components/BookRowSection";
 
 export function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [recommendedMovies, setRecommendedMovies] = useState<Movie[]>([]);
   const [friendRecommendedMovies, setFriendRecommendedMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,16 +24,17 @@ export function Home() {
   useEffect(() => {
     let isMounted = true;
 
-    const loadMovies = async () => {
+    const loadContent = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const [moviesResult, recommendationsResult, friendRecommendationsResult] =
+        const [moviesResult, recommendationsResult, friendRecommendationsResult, booksResult] =
           await Promise.allSettled([
             getMovies(1, 20),
             getRecommendations(20),
             getFriendRecommendations(20),
+            getBooks(1, 20),
           ]);
 
         if (moviesResult.status === "rejected") {
@@ -48,8 +52,11 @@ export function Home() {
             ? friendRecommendationsResult.value.items
             : [];
 
+        const bookItems = booksResult.status === "fulfilled" ? booksResult.value.items : [];
+
         if (isMounted) {
           setMovies(movieItems);
+          setBooks(bookItems);
           setRecommendedMovies(
             personalizedMovies.length > 0 ? personalizedMovies : fallbackRecommendedMovies,
           );
@@ -70,7 +77,7 @@ export function Home() {
       }
     };
 
-    void loadMovies();
+    void loadContent();
 
     return () => {
       isMounted = false;
@@ -140,6 +147,13 @@ export function Home() {
               emptyText="Додай друзів або лайкни фільми, щоб побачити рекомендації від друзів."
             />
             <RowSection title="Popular" movies={popularMovies} />
+            {books.length > 0 && (
+              <BookRowSection
+                title="Recommended Books"
+                books={books}
+                emptyText="Книги ще не додані."
+              />
+            )}
           </div>
         </>
       )}

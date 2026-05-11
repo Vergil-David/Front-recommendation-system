@@ -6,6 +6,7 @@ import { cn } from "@/utils/cn";
 const links = [
   { to: "/home", label: "Home" },
   { to: "/explore", label: "Explore" },
+  { to: "/books", label: "Books" },
   { to: "/library", label: "My Library" },
   { to: "/friends", label: "Friends" },
   { to: "/settings", label: "Settings" },
@@ -15,7 +16,7 @@ export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuthStore();
-  const isOverlay = location.pathname === "/home" || location.pathname.startsWith("/movies/");
+  const isOverlay = location.pathname === "/home" || location.pathname.startsWith("/movies/") || location.pathname.startsWith("/books/");
 
   const onLogout = () => {
     logout();
