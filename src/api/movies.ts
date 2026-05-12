@@ -17,16 +17,29 @@ export type MoviesResponse = {
   limit: number;
 };
 
-export const getMovies = async (page = 1, limit = 20): Promise<MoviesResponse> => {
+export const getMovies = async (
+  page = 1,
+  limit = 20,
+  sort?: "random",
+  genre?: string,
+): Promise<MoviesResponse> => {
   const response = await apiClient.get<MoviesResponse>("/movies", {
-    params: { page, limit },
+    params: {
+      page,
+      limit,
+      ...(sort ? { sort } : {}),
+      ...(genre ? { genre } : {}),
+    },
   });
-
   return response.data;
 };
 
 export const getMovieById = async (movieId: string | number): Promise<Movie> => {
   const response = await apiClient.get<Movie>(`/movies/${encodeURIComponent(String(movieId))}`);
-
   return response.data;
+};
+
+export const getMovieGenres = async (): Promise<string[]> => {
+  const response = await apiClient.get<{ genres: string[] }>("/movies/genres");
+  return response.data.genres;
 };

@@ -13,6 +13,7 @@ import { Library } from "@/pages/Library";
 import { MovieDetails } from "@/pages/MovieDetails";
 import { BookDetails } from "@/pages/BookDetails";
 import { SettingsPage } from "@/features/placeholders/SettingsPage";
+import { SearchPage } from "@/pages/Search";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,7 @@ export const router = createBrowserRouter([
           { path: "/library", element: <Library /> },
           { path: "/friends", element: <Friends /> },
           { path: "/settings", element: <SettingsPage /> },
+          { path: "/search", element: <SearchPage /> },
         ],
       },
     ],

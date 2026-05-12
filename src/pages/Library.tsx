@@ -63,10 +63,11 @@ export function Library() {
         setLoading(true);
         setError(null);
 
+        const kind = contentTab === "Books" ? "book" : "movie";
         const [favoritesResult, viewedResult, likedResult] = await Promise.all([
-          getFavoriteMovies(),
-          getViewedMovies(),
-          getLikedMovies(),
+          getFavoriteMovies(kind),
+          getViewedMovies(kind),
+          getLikedMovies(kind),
         ]);
 
         if (!isMounted) {
@@ -95,7 +96,7 @@ export function Library() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [contentTab]);
 
   const visibleItems = useMemo(() => {
     const tabItems = collections[activeTab];

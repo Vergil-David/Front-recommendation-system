@@ -84,7 +84,7 @@ export function Home() {
     };
   }, []);
 
-  const heroMovie = movies[0];
+  const heroMovie = recommendedMovies[0] ?? movies[0];
   const popularMovies = movies.slice(0, 20);
   const recordHeroView = () => {
     if (!heroMovie) {

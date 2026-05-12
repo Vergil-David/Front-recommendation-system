@@ -1,4 +1,5 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Search } from "lucide-react";
 import { useAuthStore } from "@/features/auth/authStore";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
@@ -32,9 +33,9 @@ export function Navbar() {
     >
       <nav className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between gap-4 px-4 md:px-8">
         <div className="flex min-w-0 items-center gap-5 md:gap-8">
-          <p className="font-display shrink-0 text-xl font-bold tracking-wide text-[#eef4ed]">
+          <NavLink to="/home" className="font-display shrink-0 text-xl font-bold tracking-wide text-[#eef4ed] transition-opacity hover:opacity-80">
             PageStream
-          </p>
+          </NavLink>
           <div className="scrollbar-hide flex min-w-0 items-center gap-5 overflow-x-auto text-sm font-medium text-[#8da9c4] md:gap-8">
             {links.map((link) => (
               <NavLink
@@ -54,6 +55,18 @@ export function Navbar() {
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-3">
+          <NavLink
+            to="/search"
+            className={({ isActive }) =>
+              cn(
+                "flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 hover:bg-[#134074]/80",
+                isActive ? "bg-[#134074]/80 text-[#eef4ed]" : "text-[#8da9c4]",
+              )
+            }
+            aria-label="Search"
+          >
+            <Search className="h-4 w-4" />
+          </NavLink>
           <span className="hidden text-sm font-medium text-[#8da9c4] sm:inline">
             {user?.username ?? "User"}
           </span>
