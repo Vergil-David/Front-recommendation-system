@@ -5,12 +5,11 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 
 const links = [
-  { to: "/home", label: "Home" },
-  { to: "/explore", label: "Explore" },
-  { to: "/books", label: "Books" },
-  { to: "/library", label: "My Library" },
-  { to: "/friends", label: "Friends" },
-  { to: "/settings", label: "Settings" },
+  { to: "/home", label: "Головна" },
+  { to: "/explore", label: "Каталог" },
+  { to: "/books", label: "Книги" },
+  { to: "/library", label: "Бібліотека" },
+  { to: "/friends", label: "Друзі" },
 ];
 
 export function Navbar() {
@@ -63,7 +62,7 @@ export function Navbar() {
                 isActive ? "bg-[#134074]/80 text-[#eef4ed]" : "text-[#8da9c4]",
               )
             }
-            aria-label="Search"
+            aria-label="Пошук"
           >
             <Search className="h-4 w-4" />
           </NavLink>
@@ -76,7 +75,7 @@ export function Navbar() {
             className="h-9 rounded-full bg-[#eef4ed] px-4 text-sm font-semibold text-[#0b2545] shadow-[0_12px_30px_rgba(0,0,0,0.24)] transition hover:scale-105 hover:bg-[#eef4ed]/90"
             onClick={onLogout}
           >
-            Logout
+            Вийти
           </Button>
         </div>
       </nav>

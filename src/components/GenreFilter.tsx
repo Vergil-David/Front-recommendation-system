@@ -1,14 +1,14 @@
 import type { Movie } from "@/api/movies";
 import { cn } from "@/utils/cn";
 
-export const GENRE_OPTIONS = ["All", "Drama", "Action", "Comedy", "Thriller", "Sci-Fi"];
+export const GENRE_OPTIONS = ["All", "Драма", "Бойовик", "Комедія", "Трилер", "Фантастика"];
 
 const GENRE_KEYWORDS: Record<string, string[]> = {
-  Drama: ["drama", "life", "family", "love", "story"],
-  Action: ["action", "war", "fight", "mission", "battle"],
-  Comedy: ["comedy", "fun", "laugh", "school", "party"],
-  Thriller: ["thriller", "crime", "mystery", "dark", "killer"],
-  "Sci-Fi": ["space", "future", "science", "robot", "planet"],
+  Драма: ["drama", "life", "family", "love", "story"],
+  Бойовик: ["action", "war", "fight", "mission", "battle"],
+  Комедія: ["comedy", "fun", "laugh", "school", "party"],
+  Трилер: ["thriller", "crime", "mystery", "dark", "killer"],
+  Фантастика: ["space", "future", "science", "robot", "planet"],
 };
 
 export function getMovieGenres(movie: Movie) {

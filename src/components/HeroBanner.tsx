@@ -11,7 +11,7 @@ type HeroBannerProps = {
 
 export function HeroBanner({
   movie,
-  eyebrow = "Featured selection",
+  eyebrow = "Вибір редакції",
   title,
   description,
   actions,

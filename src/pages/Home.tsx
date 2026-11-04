@@ -126,30 +126,30 @@ export function Home() {
                   className="inline-flex items-center gap-2 rounded-lg bg-[#eef4ed] px-6 py-3 text-sm font-semibold text-[#0b2545] shadow-[0_18px_45px_rgba(0,0,0,0.25)] transition duration-300 hover:scale-105 hover:bg-[#eef4ed]/90"
                 >
                   <Info className="h-4 w-4" aria-hidden="true" />
-                  Read More
+                  Детальніше
                 </Link>
                 <Link
                   to="/library"
                   className="glass inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-[#eef4ed] transition duration-300 hover:scale-105 hover:bg-[#134074]/80"
                 >
                   <Plus className="h-4 w-4" aria-hidden="true" />
-                  Add to Library
+                  До бібліотеки
                 </Link>
               </>
             }
           />
 
           <div className="relative z-10 mx-auto -mt-12 max-w-[1440px] space-y-12 px-4 pt-4 md:px-8">
-            <RowSection title="Recommended" movies={recommendedMovies} />
+            <RowSection title="Рекомендовано" movies={recommendedMovies} />
             <RowSection
-              title="Recommended by friends"
+              title="Рекомендують друзі"
               movies={friendRecommendedMovies}
-              emptyText="Додай друзів або лайкни фільми, щоб побачити рекомендації від друзів."
+              emptyText="Додай друзів або вподобай фільми, щоб побачити рекомендації від друзів."
             />
-            <RowSection title="Popular" movies={popularMovies} />
+            <RowSection title="Популярне" movies={popularMovies} />
             {books.length > 0 && (
               <BookRowSection
-                title="Recommended Books"
+                title="Рекомендовані книги"
                 books={books}
                 emptyText="Книги ще не додані."
               />

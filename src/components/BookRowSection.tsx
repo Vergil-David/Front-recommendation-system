@@ -11,7 +11,7 @@ type BookRowSectionProps = {
   emptyText?: string;
 };
 
-export function BookRowSection({ title, books, emptyText = "No books available." }: BookRowSectionProps) {
+export function BookRowSection({ title, books, emptyText = "Книг немає." }: BookRowSectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [hiddenBookIds, setHiddenBookIds] = useState<number[]>([]);
   const { interactionStates, setInteractionState } = useMovieInteractionStates(
@@ -55,7 +55,7 @@ export function BookRowSection({ title, books, emptyText = "No books available."
       <div className="flex items-center justify-between gap-4">
         <h2 className="font-display text-2xl font-semibold text-[#eef4ed] md:text-3xl">{title}</h2>
         {visibleBooks.length > 0 ? (
-          <p className="text-sm font-medium text-[#a78bba]">{visibleBooks.length} titles</p>
+          <p className="text-sm font-medium text-[#a78bba]">{visibleBooks.length} назв</p>
         ) : null}
       </div>
 
@@ -67,7 +67,7 @@ export function BookRowSection({ title, books, emptyText = "No books available."
             type="button"
             onClick={() => scroll("left")}
             className="glass absolute left-0 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full text-[#eef4ed] opacity-0 transition duration-300 hover:bg-[#2d1b4e]/90 group-hover/row:opacity-100 md:flex"
-            aria-label={`Scroll ${title} left`}
+            aria-label={`Прокрутити ${title} вліво`}
           >
             <ChevronLeft className="h-6 w-6" aria-hidden="true" />
           </button>
@@ -75,7 +75,7 @@ export function BookRowSection({ title, books, emptyText = "No books available."
             type="button"
             onClick={() => scroll("right")}
             className="glass absolute right-0 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full text-[#eef4ed] opacity-0 transition duration-300 hover:bg-[#2d1b4e]/90 group-hover/row:opacity-100 md:flex"
-            aria-label={`Scroll ${title} right`}
+            aria-label={`Прокрутити ${title} вправо`}
           >
             <ChevronRight className="h-6 w-6" aria-hidden="true" />
           </button>

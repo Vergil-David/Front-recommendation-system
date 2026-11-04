@@ -45,7 +45,7 @@ export const router = createBrowserRouter([
           { path: "/books/:bookId", element: <BookDetails /> },
           { path: "/library", element: <Library /> },
           { path: "/friends", element: <Friends /> },
-          { path: "/settings", element: <SettingsPage /> },
+          { path: "/settings", element: <Navigate to="/home" replace /> },
           { path: "/search", element: <SearchPage /> },
         ],
       },

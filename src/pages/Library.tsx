@@ -11,21 +11,32 @@ import { cn } from "@/utils/cn";
 const CONTENT_TABS = ["Movies", "Books"] as const;
 type ContentTab = (typeof CONTENT_TABS)[number];
 
+const CONTENT_TAB_LABELS: Record<ContentTab, string> = {
+  Movies: "Фільми",
+  Books: "Книги",
+};
+
 const LIBRARY_TABS = ["Favorites", "Watched", "Liked"] as const;
 type LibraryTab = (typeof LIBRARY_TABS)[number];
+
+const LIBRARY_TAB_LABELS: Record<LibraryTab, string> = {
+  Favorites: "Улюблені",
+  Watched: "Переглянуті",
+  Liked: "Вподобані",
+};
 
 type LibraryCollections = Record<LibraryTab, Movie[]>;
 
 const MOVIE_EMPTY_TEXT: Record<LibraryTab, string> = {
   Favorites: "Тут будуть твої улюблені фільми.",
-  Watched: "Переглянуті фільми зявляться тут.",
-  Liked: "Лайкнуті фільми зявляться тут.",
+  Watched: "Переглянуті фільми з'являться тут.",
+  Liked: "Вподобані фільми з'являться тут.",
 };
 
 const BOOK_EMPTY_TEXT: Record<LibraryTab, string> = {
   Favorites: "Тут будуть твої улюблені книги.",
-  Watched: "Прочитані книги зявляться тут.",
-  Liked: "Лайкнуті книги зявляться тут.",
+  Watched: "Прочитані книги з'являться тут.",
+  Liked: "Вподобані книги з'являться тут.",
 };
 
 export function Library() {
@@ -142,17 +153,17 @@ export function Library() {
         <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#8da9c4]">
-              My Library
+              Моя бібліотека
             </p>
             <h1 className="font-display text-4xl font-bold text-[#eef4ed] md:text-5xl">
-              Your personal collection
+              Особиста колекція
             </h1>
             <p className="max-w-2xl text-base leading-7 text-[#8da9c4]">
-              Favorites, watched, and liked picks stay close in one shelf.
+              Улюблені, переглянуті та вподобані — все в одному місці.
             </p>
           </div>
           <div className="glass w-fit rounded-full px-4 py-2 text-sm font-semibold text-[#eef4ed]">
-            {visibleItems.length} titles
+            {visibleItems.length} назв
           </div>
         </div>
 
@@ -171,7 +182,7 @@ export function Library() {
               )}
             >
               {contentTabIcons[tab]}
-              {tab}
+              {CONTENT_TAB_LABELS[tab]}
             </button>
           ))}
         </div>
@@ -191,7 +202,7 @@ export function Library() {
               )}
             >
               {tabIcons[tab]}
-              {tab}
+              {LIBRARY_TAB_LABELS[tab]}
             </button>
           ))}
         </div>

@@ -25,7 +25,7 @@ export function MovieActionButton({
   onClick,
   className,
 }: MovieActionButtonProps) {
-  const text = pending ? "Saving..." : active ? activeLabel ?? label : label;
+  const text = pending ? "Збереження..." : active ? activeLabel ?? label : label;
 
   return (
     <button

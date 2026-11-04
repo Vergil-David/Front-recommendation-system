@@ -39,7 +39,7 @@ const formatRequestDate = (value: string) => {
     return "";
   }
 
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat("uk", {
     month: "short",
     day: "numeric",
   }).format(date);
@@ -247,7 +247,7 @@ export function Friends() {
           disabled={Boolean(actionLoading)}
           onClick={() => onRespondToRequest(user.id, "accept")}
         >
-          {actionLoading === acceptKey ? "Accepting..." : "Accept"}
+          {actionLoading === acceptKey ? "Підтвердження..." : "Прийняти"}
         </button>
         <button
           type="button"
@@ -255,9 +255,9 @@ export function Friends() {
           disabled={Boolean(actionLoading)}
           onClick={() => onRespondToRequest(user.id, "reject")}
         >
-          {actionLoading === rejectKey ? "Rejecting..." : "Reject"}
+          {actionLoading === rejectKey ? "Відхилення..." : "Відхилити"}
         </button>
-        {isBusy && <span className="sr-only">Updating request</span>}
+        {isBusy && <span className="sr-only">Оновлення запиту</span>}
       </div>
     );
   };
@@ -266,7 +266,7 @@ export function Friends() {
     if (user.relation_status === "friends") {
       return (
         <span className="w-fit rounded-full bg-[#eef4ed] px-3 py-1 text-xs font-semibold text-[#0b2545]">
-          Friends
+          Друзі
         </span>
       );
     }
@@ -274,7 +274,7 @@ export function Friends() {
     if (user.relation_status === "pending_sent") {
       return (
         <span className="w-fit rounded-full bg-[#0b2545]/70 px-3 py-1 text-xs font-semibold text-[#8da9c4]">
-          Request Sent
+          Запит надіслано
         </span>
       );
     }
@@ -292,7 +292,7 @@ export function Friends() {
         disabled={Boolean(actionLoading)}
         onClick={() => onAddFriend(user.id)}
       >
-        {actionLoading === actionKey ? "Sending..." : "Add Friend"}
+        {actionLoading === actionKey ? "Надсилання..." : "Додати в друзі"}
       </button>
     );
   };
@@ -301,27 +301,27 @@ export function Friends() {
     <section className="min-h-screen px-4 pb-20 pt-24 md:px-8">
       <div className="mx-auto max-w-[1440px] space-y-10">
         <div className="space-y-3">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#8da9c4]">Friends</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#8da9c4]">Друзі</p>
           <h1 className="font-display text-4xl font-bold text-[#eef4ed] md:text-5xl">
-            See what your circle is watching
+            Дивіться, що переглядає ваше коло
           </h1>
           <p className="max-w-2xl text-base leading-7 text-[#8da9c4]">
-            Social discovery stays lightweight here: your real friends paired with recommendations
-            from the current movie feed.
+            Відкривайте нове разом з друзями: їхні вподобання поєднані з рекомендаціями з поточної
+            стрічки.
           </p>
         </div>
 
         <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
           <article className="rounded-2xl bg-[#13315c] p-5">
             <div className="space-y-2">
-              <p className="text-lg font-semibold text-[#eef4ed]">Search users</p>
-              <p className="text-sm text-[#8da9c4]">Search by username, email, or display name.</p>
+              <p className="text-lg font-semibold text-[#eef4ed]">Пошук користувачів</p>
+              <p className="text-sm text-[#8da9c4]">Пошук за іменем, email або псевдонімом.</p>
             </div>
 
             <form className="mt-5 flex flex-col gap-3 sm:flex-row" onSubmit={onSearch}>
               <input
                 className="min-h-11 flex-1 rounded-xl bg-[#0b2545]/70 px-4 text-sm text-[#eef4ed] outline-none transition placeholder:text-[#8da9c4] focus:bg-[#0b2545]"
-                placeholder="Username, email, or display name"
+                placeholder="Ім'я, email або псевдонім"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
@@ -330,7 +330,7 @@ export function Friends() {
                 className="rounded-xl bg-[#134074] px-5 py-3 text-sm font-semibold text-[#eef4ed] transition hover:bg-[#134074]/90 disabled:cursor-not-allowed disabled:opacity-60"
                 disabled={searchLoading}
               >
-                {searchLoading ? "Searching..." : "Search"}
+                {searchLoading ? "Пошук..." : "Шукати"}
               </button>
             </form>
 
@@ -356,7 +356,7 @@ export function Friends() {
                 activeSearchQuery &&
                 searchResults.length === 0 && (
                   <p className="text-sm leading-6 text-[#8da9c4]">
-                    No users found for this search.
+                    Користувачів не знайдено.
                   </p>
                 )}
             </div>
@@ -364,15 +364,15 @@ export function Friends() {
 
           <div className="space-y-4">
             <article className="rounded-2xl bg-[#13315c] p-5">
-              <p className="text-lg font-semibold text-[#eef4ed]">Incoming requests</p>
-              <p className="mt-2 text-sm text-[#8da9c4]">People waiting for your response.</p>
+              <p className="text-lg font-semibold text-[#eef4ed]">Вхідні запити</p>
+              <p className="mt-2 text-sm text-[#8da9c4]">Очікують вашої відповіді.</p>
 
               <div className="mt-5 space-y-3">
                 {requestsLoading && <p className="text-sm text-[#eef4ed]">Завантаження...</p>}
                 {requestsError && <p className="text-sm text-[#8da9c4]">{requestsError}</p>}
 
                 {!requestsLoading && !requestsError && incomingRequests.length === 0 && (
-                  <p className="text-sm leading-6 text-[#8da9c4]">No pending incoming requests.</p>
+                  <p className="text-sm leading-6 text-[#8da9c4]">Вхідних запитів немає.</p>
                 )}
 
                 {!requestsLoading &&
@@ -382,7 +382,7 @@ export function Friends() {
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <UserSummary
                           user={request.from_user}
-                          meta={formatRequestDate(request.created_at) || "Pending"}
+                          meta={formatRequestDate(request.created_at) || "Очікує"}
                         />
                         {renderRequestActions(request.from_user)}
                       </div>
@@ -392,15 +392,15 @@ export function Friends() {
             </article>
 
             <article className="rounded-2xl bg-[#13315c] p-5">
-              <p className="text-lg font-semibold text-[#eef4ed]">Outgoing requests</p>
-              <p className="mt-2 text-sm text-[#8da9c4]">Requests you have already sent.</p>
+              <p className="text-lg font-semibold text-[#eef4ed]">Вихідні запити</p>
+              <p className="mt-2 text-sm text-[#8da9c4]">Запити, які ви вже надіслали.</p>
 
               <div className="mt-5 space-y-3">
                 {requestsLoading && <p className="text-sm text-[#eef4ed]">Завантаження...</p>}
                 {requestsError && <p className="text-sm text-[#8da9c4]">{requestsError}</p>}
 
                 {!requestsLoading && !requestsError && outgoingRequests.length === 0 && (
-                  <p className="text-sm leading-6 text-[#8da9c4]">No outgoing requests yet.</p>
+                  <p className="text-sm leading-6 text-[#8da9c4]">Вихідних запитів немає.</p>
                 )}
 
                 {!requestsLoading &&
@@ -410,10 +410,10 @@ export function Friends() {
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <UserSummary
                           user={request.to_user}
-                          meta={formatRequestDate(request.created_at) || "Pending"}
+                          meta={formatRequestDate(request.created_at) || "Очікує"}
                         />
                         <span className="w-fit rounded-full bg-[#0b2545]/70 px-3 py-1 text-xs font-semibold text-[#8da9c4]">
-                          Request Sent
+                          Запит надіслано
                         </span>
                       </div>
                     </div>
@@ -425,8 +425,8 @@ export function Friends() {
 
         <section className="space-y-4">
           <div className="space-y-2">
-            <p className="text-2xl font-semibold text-[#eef4ed]">My Circle</p>
-            <p className="text-sm text-[#8da9c4]">People connected to your PageStream account.</p>
+            <p className="text-2xl font-semibold text-[#eef4ed]">Моє коло</p>
+            <p className="text-sm text-[#8da9c4]">Люди, пов'язані з вашим акаунтом PageStream.</p>
           </div>
 
           {friendsLoading && <p className="text-base text-[#eef4ed]">Завантаження...</p>}
@@ -434,9 +434,9 @@ export function Friends() {
 
           {!friendsLoading && !friendsError && friends.length === 0 && (
             <article className="rounded-2xl bg-[#13315c] p-5">
-              <p className="text-lg font-semibold text-[#eef4ed]">No friends yet</p>
+              <p className="text-lg font-semibold text-[#eef4ed]">Поки немає друзів</p>
               <p className="mt-2 text-sm text-[#8da9c4]">
-                Search for people above and send your first friend request.
+                Знайдіть когось вище і надішліть перший запит у друзі.
               </p>
             </article>
           )}
@@ -459,7 +459,7 @@ export function Friends() {
         {moviesError && <p className="text-base text-[#eef4ed]">{moviesError}</p>}
 
         {!moviesLoading && !moviesError && (
-          <RowSection title="Recommendations From Friends" movies={movies.slice(0, 10)} />
+          <RowSection title="Рекомендації від друзів" movies={movies.slice(0, 10)} />
         )}
       </div>
     </section>

@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ArrowLeft, Ban, BookMarked, Calendar, Check, Heart, Plus, Star, ThumbsDown } from "lucide-react";
+import { ArrowLeft, Ban, BookMarked, Calendar, Heart, Star, ThumbsDown } from "lucide-react";
 import { getBookById, getBooks, type Book } from "@/api/books";
 import { createInteraction, type InteractionType } from "@/api/recommendations";
 import {
@@ -194,7 +194,7 @@ export function BookDetails() {
 
                   <div className="max-w-3xl pb-1">
                     <p className="animate-fade-in text-sm font-semibold uppercase tracking-[0.24em] text-[#a78bba]">
-                      {`Published in ${book.release_year}`}
+                      {`Видано у ${book.release_year}`}
                     </p>
                     <h1 className="font-display mt-4 max-w-4xl animate-fade-in-up text-5xl font-bold leading-tight text-[#eef4ed] md:text-6xl lg:text-7xl">
                       {book.title}
@@ -209,7 +209,7 @@ export function BookDetails() {
                         className="glass inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-[#eef4ed] transition duration-300 hover:-translate-y-0.5 hover:bg-[#2d1b4e]/80"
                       >
                         <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-                        Back to Books
+                        Назад до книг
                       </Link>
                     </div>
                   </div>
@@ -231,7 +231,7 @@ export function BookDetails() {
               <div className="flex flex-col justify-center space-y-6">
                 <div className="space-y-3">
                   <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#a78bba]">
-                    Book Details
+                    Про книгу
                   </p>
                   <h2 className="font-display text-3xl font-bold text-[#eef4ed] md:text-4xl">
                     {book.title}
@@ -244,21 +244,13 @@ export function BookDetails() {
                   </span>
                   <span className="inline-flex items-center gap-2 rounded-full bg-[#1a0f2e]/55 px-4 py-2 text-sm font-semibold text-[#eef4ed]">
                     <BookMarked className="h-4 w-4 text-[#a78bba]" aria-hidden="true" />
-                    Curated match
+                    Підібрано для вас
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <MovieActionButton
-                    label="Read"
-                    icon={Check}
-                    active={interactionState.viewed}
-                    pending={pendingAction === "viewed"}
-                    disabled={pendingAction !== null}
-                    onClick={() => void handleInteraction("viewed")}
-                  />
-                  <MovieActionButton
-                    label="Like"
-                    activeLabel="Liked"
+                    label="Подобається"
+                    activeLabel="Вподобано"
                     icon={Heart}
                     active={interactionState.liked}
                     pending={pendingAction === "liked"}
@@ -266,8 +258,8 @@ export function BookDetails() {
                     onClick={() => void handleInteraction("liked")}
                   />
                   <MovieActionButton
-                    label="Dislike"
-                    activeLabel="Disliked"
+                    label="Не подобається"
+                    activeLabel="Не сподобалось"
                     icon={ThumbsDown}
                     active={interactionState.disliked}
                     pending={pendingAction === "disliked"}
@@ -275,8 +267,8 @@ export function BookDetails() {
                     onClick={() => void handleInteraction("disliked")}
                   />
                   <MovieActionButton
-                    label="Favorite"
-                    activeLabel="Saved"
+                    label="В обране"
+                    activeLabel="Збережено"
                     icon={Star}
                     active={interactionState.favorite}
                     pending={pendingAction === "favorite"}
@@ -284,27 +276,20 @@ export function BookDetails() {
                     onClick={() => void handleInteraction("favorite")}
                   />
                   <MovieActionButton
-                    label="Not interested"
-                    activeLabel="Hidden"
+                    label="Не цікаво"
+                    activeLabel="Приховано"
                     icon={Ban}
                     active={interactionState.skipped}
                     pending={pendingAction === "skipped"}
                     disabled={pendingAction !== null}
                     onClick={() => void handleInteraction("skipped")}
                   />
-                  <Link
-                    to="/library"
-                    className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-[rgba(26,15,46,0.7)] px-4 py-2.5 text-sm font-semibold text-[#eef4ed] shadow-[0_18px_45px_rgba(10,5,18,0.24)] backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:bg-[rgba(45,27,78,0.88)]"
-                  >
-                    <Plus className="h-4 w-4" aria-hidden="true" />
-                    Add to Library
-                  </Link>
                 </div>
                 <p className="max-w-3xl text-base leading-8 text-[#a78bba]">{book.description}</p>
               </div>
             </section>
 
-            <BookRowSection title="More Like This" books={relatedBooks} />
+            <BookRowSection title="Схожі книги" books={relatedBooks} />
           </div>
         </>
       )}

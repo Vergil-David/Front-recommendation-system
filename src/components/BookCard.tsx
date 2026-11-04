@@ -138,8 +138,8 @@ export function BookCard({
           <div className="pointer-events-auto flex max-w-full flex-nowrap items-center gap-1.5 overflow-hidden rounded-full bg-[rgba(18,10,31,0.72)] p-1.5 shadow-[0_18px_45px_rgba(10,5,18,0.32)] backdrop-blur-2xl">
             <MovieActionButton
               compact
-              label="Like"
-              activeLabel="Liked"
+              label="Подобається"
+              activeLabel="Вподобано"
               icon={Heart}
               active={isLiked}
               pending={pendingAction === "liked"}
@@ -148,8 +148,8 @@ export function BookCard({
             />
             <MovieActionButton
               compact
-              label="Favorite"
-              activeLabel="Saved"
+              label="В обране"
+              activeLabel="Збережено"
               icon={Star}
               active={isFavorite}
               pending={pendingAction === "favorite"}
@@ -158,8 +158,8 @@ export function BookCard({
             />
             <MovieActionButton
               compact
-              label="Not interested"
-              activeLabel="Hidden"
+              label="Не цікаво"
+              activeLabel="Приховано"
               icon={Ban}
               active={isSkipped}
               pending={pendingAction === "skipped"}

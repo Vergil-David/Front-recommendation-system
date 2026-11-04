@@ -1,38 +1,79 @@
-# Book Recommendation System Frontend
+# PageStream — Frontend
 
-Minimal scaffold for diploma project frontend with auth flow and protected placeholder routes.
+Фронтенд застосунку **PageStream** — персональна система рекомендацій фільмів та книг із соціальними функціями.
 
-## Stack
-- Vite + React + TypeScript
-- Tailwind CSS
-- shadcn/ui (initialized via `components.json` + UI primitives)
-- React Router v6
-- TanStack Query
-- Axios with interceptors
-- Zustand auth store
-- ESLint + Prettier
+## Технологічний стек
 
-## Setup
-1. Install dependencies:
+| Категорія         | Технологія                        |
+|-------------------|-----------------------------------|
+| Збірник / Runtime | Vite + React 18 + TypeScript      |
+| Стилізація        | Tailwind CSS + shadcn/ui          |
+| Маршрутизація     | React Router v6                   |
+| Стан / Запити     | Zustand + TanStack Query (React Query) |
+| HTTP клієнт       | Axios з interceptors              |
+| Лінтинг / Формат  | ESLint + Prettier                 |
+
+## Функціональність
+
+- 🔐 **Автентифікація** — реєстрація, вхід, захищені маршрути
+- 🎬 **Фільми** — головна стрічка, деталі фільму, жанрові фільтри, пошук
+- 📚 **Книги** — каталог книг, деталі, жанрові фільтри
+- 👤 **Бібліотека** — улюблені, переглянуті, вподобані (фільми та книги)
+- 👥 **Друзі** — пошук, надсилання/прийняття запитів, рекомендації від друзів
+- 🌐 **Локалізований інтерфейс** — повністю українська мова UI
+
+## Структура проекту
+
+```
+src/
+├── app/           # Провайдери, роутер
+├── components/    # UI компоненти (картки, фільтри, navbar, банер)
+│   ├── common/    # Загальні компоненти (Loading тощо)
+│   └── layout/    # Navbar
+├── pages/         # Сторінки застосунку
+├── services/      # API сервіси (axios)
+├── stores/        # Zustand сторери
+├── styles/        # Глобальні стилі
+└── utils/         # Допоміжні утиліти
+```
+
+## Встановлення та запуск
+
+### 1. Встановити залежності
+
 ```bash
 npm install
 ```
 
-2. Create `.env` in project root:
+### 2. Налаштувати змінні середовища
+
+Створіть файл `.env` у кореневій папці проекту:
+
 ```env
 VITE_API_URL=/api
 ```
 
-3. Run dev server:
+### 3. Запустити dev-сервер
+
 ```bash
 npm run dev
 ```
 
-## Available Scripts
-- `npm run dev`
-- `npm run build`
-- `npm run preview`
-- `npm run lint`
-- `npm run format`
-- `npm run format:check`
-gl
+Застосунок буде доступний за адресою `http://localhost:5173`.
+
+## Доступні скрипти
+
+| Скрипт               | Опис                                 |
+|----------------------|--------------------------------------|
+| `npm run dev`        | Запустити dev-сервер                 |
+| `npm run build`      | Зібрати production-бандл             |
+| `npm run preview`    | Переглянути production-збірку        |
+| `npm run lint`       | Перевірити код ESLint                |
+| `npm run format`     | Відформатувати код Prettier          |
+| `npm run format:check` | Перевірити форматування            |
+
+## Зв'язок з бекендом
+
+Докладний опис підключення до API — у файлі [`FRONT_BACK_CONNECTION.txt`](./FRONT_BACK_CONNECTION.txt).
+
+Бекенд репозиторій: [recommendation-system](https://github.com/Vergil-David/recommendation-system)

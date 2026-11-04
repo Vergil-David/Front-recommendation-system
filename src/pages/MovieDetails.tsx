@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ArrowLeft, Ban, Calendar, Check, Compass, Heart, Plus, Star, ThumbsDown } from "lucide-react";
+import { ArrowLeft, Ban, Calendar, Compass, Heart, Star, ThumbsDown } from "lucide-react";
 import { getMovieById, getMovies, type Movie } from "@/api/movies";
 import { createInteraction, getRecommendations, type InteractionType } from "@/api/recommendations";
 import {
@@ -174,7 +174,7 @@ export function MovieDetails() {
         <>
           <HeroBanner
             movie={movie}
-            eyebrow={`Released in ${movie.release_year}`}
+            eyebrow={`Вийшов у ${movie.release_year}`}
             description={movie.description}
             actions={
               <>
@@ -183,7 +183,7 @@ export function MovieDetails() {
                   className="glass inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-[#eef4ed] transition duration-300 hover:-translate-y-0.5 hover:bg-[#134074]/80"
                 >
                   <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-                  Back to Explore
+                  Назад до каталогу
                 </Link>
               </>
             }
@@ -202,7 +202,7 @@ export function MovieDetails() {
               <div className="flex flex-col justify-center space-y-6">
                 <div className="space-y-3">
                   <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#8da9c4]">
-                    Movie Details
+                    Про фільм
                   </p>
                   <h2 className="font-display text-3xl font-bold text-[#eef4ed] md:text-4xl">
                     {movie.title}
@@ -215,21 +215,13 @@ export function MovieDetails() {
                   </span>
                   <span className="inline-flex items-center gap-2 rounded-full bg-[#0b2545]/55 px-4 py-2 text-sm font-semibold text-[#eef4ed]">
                     <Compass className="h-4 w-4 text-[#8da9c4]" aria-hidden="true" />
-                    Curated match
+                    Підібрано для вас
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <MovieActionButton
-                    label="Watched"
-                    icon={Check}
-                    active={interactionState.viewed}
-                    pending={pendingAction === "viewed"}
-                    disabled={pendingAction !== null}
-                    onClick={() => void handleInteraction("viewed")}
-                  />
-                  <MovieActionButton
-                    label="Like"
-                    activeLabel="Liked"
+                    label="Подобається"
+                    activeLabel="Вподобано"
                     icon={Heart}
                     active={interactionState.liked}
                     pending={pendingAction === "liked"}
@@ -237,8 +229,8 @@ export function MovieDetails() {
                     onClick={() => void handleInteraction("liked")}
                   />
                   <MovieActionButton
-                    label="Dislike"
-                    activeLabel="Disliked"
+                    label="Не подобається"
+                    activeLabel="Не сподобалось"
                     icon={ThumbsDown}
                     active={interactionState.disliked}
                     pending={pendingAction === "disliked"}
@@ -246,8 +238,8 @@ export function MovieDetails() {
                     onClick={() => void handleInteraction("disliked")}
                   />
                   <MovieActionButton
-                    label="Favorite"
-                    activeLabel="Saved"
+                    label="В обране"
+                    activeLabel="Збережено"
                     icon={Star}
                     active={interactionState.favorite}
                     pending={pendingAction === "favorite"}
@@ -255,27 +247,20 @@ export function MovieDetails() {
                     onClick={() => void handleInteraction("favorite")}
                   />
                   <MovieActionButton
-                    label="Not interested"
-                    activeLabel="Hidden"
+                    label="Не цікаво"
+                    activeLabel="Приховано"
                     icon={Ban}
                     active={interactionState.skipped}
                     pending={pendingAction === "skipped"}
                     disabled={pendingAction !== null}
                     onClick={() => void handleInteraction("skipped")}
                   />
-                  <Link
-                    to="/library"
-                    className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-[rgba(11,37,69,0.7)] px-4 py-2.5 text-sm font-semibold text-[#eef4ed] shadow-[0_18px_45px_rgba(4,15,27,0.24)] backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:bg-[rgba(19,64,116,0.88)]"
-                  >
-                    <Plus className="h-4 w-4" aria-hidden="true" />
-                    Add to Library
-                  </Link>
                 </div>
                 <p className="max-w-3xl text-base leading-8 text-[#8da9c4]">{movie.description}</p>
               </div>
             </section>
 
-            <RowSection title="More Like This" movies={relatedMovies} />
+            <RowSection title="Схожі фільми" movies={relatedMovies} />
           </div>
         </>
       )}

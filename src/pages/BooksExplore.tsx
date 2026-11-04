@@ -84,17 +84,17 @@ export function BooksExplore() {
         <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#a78bba]">
-              Books
+              Книги
             </p>
             <h1 className="font-display text-4xl font-bold text-[#eef4ed] md:text-5xl">
-              Find your next read
+              Знайди свою наступну книгу
             </h1>
             <p className="max-w-2xl text-base leading-7 text-[#a78bba]">
-              Browse a curated catalog shaped around your reading tastes.
+              Переглядай підібраний каталог за твоїми читацькими смаками.
             </p>
           </div>
           <div className="glass w-fit rounded-full px-4 py-2 text-sm font-semibold text-[#eef4ed]">
-            {filteredBooks.length}{hasMore && selectedGenre === "All" ? ` / ${total}` : ""} titles
+            {filteredBooks.length}{hasMore && selectedGenre === "All" ? ` / ${total}` : ""} назв
           </div>
         </div>
 
@@ -102,7 +102,7 @@ export function BooksExplore() {
         {genres.length > 0 && (
           <div className="space-y-4">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#a78bba]">
-              Filters
+              Фільтри
             </p>
             <div className="scrollbar-hide flex gap-3 overflow-x-auto pb-1">
               <button
@@ -115,7 +115,7 @@ export function BooksExplore() {
                     : "glass text-[#a78bba] hover:bg-[#2d1b4e]/80 hover:text-[#e8d5f5]",
                 )}
               >
-                All
+                Всі
               </button>
               {genres.map((genre) => (
                 <button
@@ -170,7 +170,7 @@ export function BooksExplore() {
                   disabled={loadingMore}
                   className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#3d1f6d,#2d1b4e)] px-6 py-3 text-sm font-semibold text-[#e8d5f5] shadow-[0_18px_45px_rgba(26,15,46,0.28)] transition duration-300 hover:scale-105 hover:shadow-[0_24px_55px_rgba(45,27,78,0.3)] disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {loadingMore ? "Завантаження..." : "Load more"}
+                  {loadingMore ? "Завантаження..." : "Завантажити ще"}
                 </button>
               </div>
             )}
