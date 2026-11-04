@@ -4,10 +4,16 @@ import { ProtectedRoute } from "@/components/common/ProtectedRoute";
 import { RootRedirect } from "@/components/common/RootRedirect";
 import { LoginPage } from "@/features/auth/LoginPage";
 import { RegisterPage } from "@/features/auth/RegisterPage";
-import { ExplorePage } from "@/features/placeholders/ExplorePage";
-import { FriendsPage } from "@/features/placeholders/FriendsPage";
-import { HomePage } from "@/features/placeholders/HomePage";
+import { OnboardingPage } from "@/features/onboarding/OnboardingPage";
+import { Explore } from "@/pages/Explore";
+import { BooksExplore } from "@/pages/BooksExplore";
+import { Friends } from "@/pages/Friends";
+import { Home } from "@/pages/Home";
+import { Library } from "@/pages/Library";
+import { MovieDetails } from "@/pages/MovieDetails";
+import { BookDetails } from "@/pages/BookDetails";
 import { SettingsPage } from "@/features/placeholders/SettingsPage";
+import { SearchPage } from "@/pages/Search";
 
 export const router = createBrowserRouter([
   {
@@ -26,12 +32,21 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
+        path: "/onboarding",
+        element: <OnboardingPage />,
+      },
+      {
         element: <AppShell />,
         children: [
-          { path: "/home", element: <HomePage /> },
-          { path: "/explore", element: <ExplorePage /> },
-          { path: "/friends", element: <FriendsPage /> },
-          { path: "/settings", element: <SettingsPage /> },
+          { path: "/home", element: <Home /> },
+          { path: "/explore", element: <Explore /> },
+          { path: "/books", element: <BooksExplore /> },
+          { path: "/movies/:movieId", element: <MovieDetails /> },
+          { path: "/books/:bookId", element: <BookDetails /> },
+          { path: "/library", element: <Library /> },
+          { path: "/friends", element: <Friends /> },
+          { path: "/settings", element: <Navigate to="/home" replace /> },
+          { path: "/search", element: <SearchPage /> },
         ],
       },
     ],

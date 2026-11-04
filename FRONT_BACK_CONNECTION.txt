@@ -1,0 +1,66 @@
+FRONTEND-BACKEND CONNECTION NOTES (UPDATED)
+
+1) Current frontend-backend integration
+- Frontend auth API is separated into dedicated file:
+  - src/api/auth.ts
+- Auth pages use API functions instead of inline fetch logic:
+  - LoginPage -> login(...)
+  - RegisterPage -> register(...)
+- Auth uses direct backend URL:
+  - API_URL = http://localhost:8080
+
+2) 401 login fix applied
+- Added normalization before login/register request:
+  - email -> trim + lowercase
+  - username -> trim
+  - password -> trim
+- Added explicit 401 handling in login API:
+  - returns user-friendly error: "Невірний email або пароль"
+- This fixes common false 401 cases caused by spaces/case in input.
+
+3) UI update (auth pages)
+- Login/Register pages restyled to strict dark minimalist theme:
+  - background: #0b2545
+  - panel/input: #13315c
+  - button/accent: #134074
+  - muted text: #8da9c4
+  - primary text: #eef4ed
+- No theme hsl vars used in these pages.
+- No logic/state changes for auth flow.
+
+4) Backend compatibility
+- Backend now has CORS middleware configured for frontend origin (see backend txt).
+- Allowed frontend origin is controlled by env:
+  - FRONTEND_URL=http://localhost:5173
+
+5) How to run
+1. Start backend on port 8080.
+2. In frontend project:
+   - npm install
+   - npm run dev
+3. Open frontend in browser (usually http://localhost:5173).
+
+6) API endpoints used by frontend
+- POST /auth/register
+- POST /auth/login
+- GET /users/me
+- GET /users/search
+- GET /friends
+- POST /friends/requests
+- GET /friends/requests/incoming
+- GET /friends/requests/outgoing
+- POST /friends/requests/respond
+- GET /movies
+- GET /ping
+
+7) Friends 404 postmortem
+- Root cause of `404` on Friends page was not frontend design or API naming.
+- Frontend dev client correctly calls `/api/...` and Vite proxy correctly rewrites:
+  - `/api/users/search` -> `http://localhost:8080/users/search`
+  - `/api/friends/requests/incoming` -> `http://localhost:8080/friends/requests/incoming`
+  - `/api/friends/requests/outgoing` -> `http://localhost:8080/friends/requests/outgoing`
+- The issue was an outdated backend process running on port `8080`. It served old routes and did not include the new friends endpoints.
+- After restarting the current backend code, these URLs stopped returning `404`.
+- Expected behavior now:
+  - direct backend routes without token return `401` because they are protected;
+  - frontend dev routes under `/api/...` also return `401` without token and work normally when the browser sends the Bearer token through `src/api/client.ts`.

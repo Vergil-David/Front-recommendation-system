@@ -45,6 +45,49 @@ export type FriendsResponse = {
   friends: User[];
 };
 
+export type RelationStatus = "none" | "pending_sent" | "pending_received" | "friends";
+
+export type UserSearchResult = {
+  id: string;
+  email: string;
+  username: string;
+  display_name?: string;
+  avatar_url?: string;
+  relation_status: RelationStatus;
+};
+
+export type SearchUsersResponse = {
+  users: UserSearchResult[];
+};
+
+export type FriendRequestUser = {
+  id: string;
+  email?: string;
+  username: string;
+  display_name?: string;
+  avatar_url?: string;
+};
+
+export type IncomingFriendRequest = {
+  from_user: FriendRequestUser;
+  status: "pending";
+  created_at: string;
+};
+
+export type OutgoingFriendRequest = {
+  to_user: FriendRequestUser;
+  status: "pending";
+  created_at: string;
+};
+
+export type IncomingFriendRequestsResponse = {
+  requests: IncomingFriendRequest[];
+};
+
+export type OutgoingFriendRequestsResponse = {
+  requests: OutgoingFriendRequest[];
+};
+
 export type SendFriendRequest = {
   to_user_id: string;
 };

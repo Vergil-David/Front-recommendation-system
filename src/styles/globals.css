@@ -1,20 +1,152 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 :root {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --background: #0b2545;
+  --surface: #13315c;
+  --primary: #134074;
+  --highlight: #8da9c4;
+  --light: #eef4ed;
+
+  font-family:
+    "Plus Jakarta Sans",
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+  color: var(--light);
+  background: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  background: var(--background);
 }
 
 body {
+  min-width: 320px;
+  min-height: 100vh;
   margin: 0;
-  background: #f8fafc;
-  color: #111827;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(19, 64, 116, 0.65), transparent 34rem),
+    linear-gradient(180deg, #0b2545 0%, #061629 100%);
+  color: var(--light);
 }
 
 * {
   box-sizing: border-box;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+::selection {
+  background: rgba(141, 169, 196, 0.35);
+  color: var(--light);
+}
+
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: "Playfair Display", Georgia, serif;
+  }
+
+  .app-surface {
+    background:
+      radial-gradient(circle at top left, rgba(19, 64, 116, 0.55), transparent 32rem),
+      radial-gradient(circle at 90% 10%, rgba(141, 169, 196, 0.14), transparent 26rem),
+      linear-gradient(180deg, #0b2545 0%, #081c35 48%, #061629 100%);
+  }
+
+  .glass {
+    background: rgba(19, 49, 92, 0.62);
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.24);
+    backdrop-filter: blur(22px);
+  }
+
+  .glass-strong {
+    background: rgba(19, 49, 92, 0.84);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(26px);
+  }
+
+  .gradient-hero {
+    background: linear-gradient(
+      to top,
+      #0b2545 0%,
+      rgba(11, 37, 69, 0.96) 18%,
+      rgba(11, 37, 69, 0.74) 52%,
+      rgba(11, 37, 69, 0.28) 100%
+    );
+  }
+
+  .gradient-hero-side {
+    background: linear-gradient(
+      to right,
+      #0b2545 0%,
+      rgba(11, 37, 69, 0.86) 34%,
+      rgba(11, 37, 69, 0.18) 74%,
+      transparent 100%
+    );
+  }
+
+  .gradient-fade-bottom {
+    background: linear-gradient(to top, #0b2545 0%, rgba(11, 37, 69, 0.84) 32%, transparent 100%);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .soft-depth {
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.26);
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.7s ease-out forwards;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
